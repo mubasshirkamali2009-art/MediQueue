@@ -18,7 +18,7 @@ const Navbar = () => {
             <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
             <path d="M6 12v5c3 3 9 3 12 0v-5" />
           </svg>
-          <span className="font-bold text-lg text-indigo-600">TutorConnect</span>
+          <span className="font-bold text-lg text-indigo-600">MediQueue</span>
         </Link>
 
         <div className="hidden lg:flex items-center gap-1">
