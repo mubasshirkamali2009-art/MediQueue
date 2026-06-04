@@ -48,10 +48,25 @@ const AddTutorPage = () => {
     );
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const formdata =new FormData(e.currentTarget)
+    const destinatoin = Object.fromEntries(formdata.entries())
+    console.log(destinatoin)
+ 
+
+      const res = await fetch('http://localhost:5000/tutors' , {
+        method: 'POST' , 
+        headers: {
+            'content-type': 'application/json'
+        }
+        , 
+        body: JSON.stringify(form)
+      })
+
+
+      const data = await res.json()
+      console.log(data)
   };
 
   return (

@@ -23,7 +23,7 @@ const Navbar = () => {
 
         <div className="hidden lg:flex items-center gap-1">
           <Link href="/" className="text-sm text-gray-700 hover:text-indigo-600 px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition-colors font-medium">Home</Link>
-          <Link href="/tutors" className="text-sm text-gray-700 hover:text-indigo-600 px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition-colors font-medium">Tutors</Link>
+          <Link href="/teachers" className="text-sm text-gray-700 hover:text-indigo-600 px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition-colors font-medium">Tutors</Link>
           <Link href="/add-tutor" className="text-sm text-gray-700 hover:text-indigo-600 px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition-colors font-medium">Add Tutor</Link>
           <Link href="/my-tutors" className="text-sm text-gray-700 hover:text-indigo-600 px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition-colors font-medium">My Tutors</Link>
           <Link href="/booked-sessions" className="text-sm text-gray-700 hover:text-indigo-600 px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition-colors font-medium">My Booked Sessions</Link>
@@ -67,7 +67,7 @@ const Navbar = () => {
       {mobileOpen && (
         <div className="lg:hidden border-t border-gray-100 bg-white px-4 pb-4 pt-2 flex flex-col gap-1">
           <Link href="/" className="text-base text-gray-700 hover:text-indigo-600 py-2.5 font-medium border-b border-gray-100 block">Home</Link>
-          <Link href="/tutors" className="text-base text-gray-700 hover:text-indigo-600 py-2.5 font-medium border-b border-gray-100 block">Tutors</Link>
+          <Link href="/teachers" className="text-base text-gray-700 hover:text-indigo-600 py-2.5 font-medium border-b border-gray-100 block">Tutors</Link>
           <Link href="/add-tutor" className="text-base text-gray-700 hover:text-indigo-600 py-2.5 font-medium border-b border-gray-100 block">Add Tutor</Link>
           <Link href="/my-tutors" className="text-base text-gray-700 hover:text-indigo-600 py-2.5 font-medium border-b border-gray-100 block">My Tutors</Link>
           <Link href="/booked-sessions" className="text-base text-gray-700 hover:text-indigo-600 py-2.5 font-medium border-b border-gray-100 block">My Booked Sessions</Link>
