@@ -1,6 +1,5 @@
 "use client";
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
+
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -39,7 +38,7 @@ const TeacherPage = () => {
 
   return (
     <div>
-        <Navbar></Navbar>
+        
         <section className="px-4 py-8 max-w-7xl mx-auto">
       <h2 className="text-2xl font-bold text-gray-800 mb-6">All Tutors</h2>
 
@@ -133,7 +132,7 @@ const TeacherPage = () => {
         ))}
       </div>
     </section>
-    <Footer></Footer>
+
     </div>
     
   );

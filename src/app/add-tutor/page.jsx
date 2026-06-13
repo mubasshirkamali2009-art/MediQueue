@@ -1,7 +1,6 @@
 "use client";
 
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
+
 import { useState } from "react";
 import { toast, Toaster } from "sonner";
 
@@ -99,7 +98,7 @@ const AddTutorPage = () => {
 
   return (
     <div>
-      <Navbar />
+      
 
       {/* Sonner toast container — dark theme to match the page */}
       <Toaster theme="dark" position="top-right" richColors closeButton />
@@ -380,7 +379,7 @@ const AddTutorPage = () => {
           </form>
         </div>
       </div>
-      <Footer />
+      
     </div>
   );
 };
