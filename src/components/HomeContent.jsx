@@ -1,48 +1,25 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
-import useEmblaCarousel from "embla-carousel-react";
-import Autoplay from "embla-carousel-autoplay";
-import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Search, CalendarDays, GraduationCap, Users, BookOpen, Star,
-  ChevronLeft, ChevronRight, Sun, Moon, FlaskConical, Zap, Dna,
+  Sun, Moon, FlaskConical, Zap, Dna,
   Code2, CircleDollarSign, PenLine, Map, ArrowRight, Inbox
 } from "lucide-react";
 
-const SLIDES = [
-  {
-    img: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1400&q=80",
-    tag: "Live Sessions",
-    heading: "Study with tutors who actually know their subject.",
-    sub: "Real experts. Flexible schedules. Results that speak for themselves.",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=1400&q=80",
-    tag: "1-on-1 Learning",
-    heading: "Your pace. Your goals. Your tutor.",
-    sub: "Book a session that fits around your life, not the other way around.",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1400&q=80",
-    tag: "All Subjects",
-    heading: "From algebra to algorithms — we have you covered.",
-    sub: "Mathematics, Sciences, Languages, CS and more — all in one place.",
-  },
-];
-
 const STATS = [
-  { value: "1,200+", label: "Active Tutors",    icon: Users },
-  { value: "38K+",   label: "Sessions Booked",  icon: CalendarDays },
-  { value: "94%",    label: "Satisfaction Rate", icon: Star },
-  { value: "60+",    label: "Subjects Covered",  icon: BookOpen },
+  { value: "1,200+", label: "Active Tutors",     icon: Users },
+  { value: "38K+",   label: "Sessions Booked",   icon: CalendarDays },
+  { value: "94%",    label: "Satisfaction Rate",  icon: Star },
+  { value: "60+",    label: "Subjects Covered",   icon: BookOpen },
 ];
 
 const STEPS = [
-  { icon: Search,       step: "01", title: "Browse Tutors",  desc: "Filter by subject, availability, teaching mode, and fee to find your ideal match." },
-  { icon: CalendarDays, step: "02", title: "Book a Session", desc: "Pick a slot that fits your schedule. Online or offline — your choice." },
-  { icon: GraduationCap,step: "03", title: "Start Learning", desc: "Join your session and track progress. Rebook with the same tutor anytime." },
+  { icon: Search,        step: "01", title: "Browse Tutors",  desc: "Filter by subject, availability, teaching mode, and fee to find your ideal match." },
+  { icon: CalendarDays,  step: "02", title: "Book a Session", desc: "Pick a slot that fits your schedule. Online or offline — your choice." },
+  { icon: GraduationCap, step: "03", title: "Start Learning", desc: "Join your session and track progress. Rebook with the same tutor anytime." },
 ];
 
 const TESTIMONIALS = [
@@ -76,7 +53,7 @@ function SkeletonCard() {
   );
 }
 
-function TutorCard({ teacher, onBook }) {
+function TutorCard({ teacher }) {
   const modeColor = {
     Online:  "badge-success",
     Offline: "badge-warning",
@@ -115,37 +92,22 @@ function TutorCard({ teacher, onBook }) {
             ${teacher.hourlyFee}
             <span className="text-xs font-normal text-base-content/40"> / hr</span>
           </span>
-          <button className="btn btn-primary btn-sm rounded-xl" onClick={() => onBook(teacher._id)}>
-            Book Session
-          </button>
+          {/* ✅ Link instead of router.push — avoids router init error */}
+          <Link href={`/tutors/${teacher._id}`}>
+            <button className="btn btn-primary btn-sm rounded-xl">Book Session</button>
+          </Link>
         </div>
       </div>
     </div>
   );
 }
 
-const autoplayPlugin = Autoplay({ delay: 4500, stopOnInteraction: false });
-
 const HomeContent = () => {
   const router = useRouter();
-  const [isDark, setIsDark]               = useState(true);
-  const [selectedSlide, setSelectedSlide] = useState(0);
-  const [teachers, setTeachers]           = useState([]);
+  const [isDark, setIsDark]                   = useState(true);
+  const [teachers, setTeachers]               = useState([]);
   const [loadingTeachers, setLoadingTeachers] = useState(true);
   const [testimonialIdx, setTestimonialIdx]   = useState(0);
-
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [autoplayPlugin]);
-
-  const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
-  const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
-  const scrollTo   = useCallback((i) => emblaApi && emblaApi.scrollTo(i), [emblaApi]);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-    const onSelect = () => setSelectedSlide(emblaApi.selectedScrollSnap());
-    emblaApi.on("select", onSelect);
-    return () => emblaApi.off("select", onSelect);
-  }, [emblaApi]);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", isDark ? "night" : "corporate");
@@ -167,7 +129,7 @@ const HomeContent = () => {
   return (
     <div>
 
-      {/* Theme Toggle FAB */}
+      {/* ── Theme Toggle FAB ──────────────────────────────────────────── */}
       <button
         onClick={() => setIsDark(!isDark)}
         className="fixed bottom-6 right-6 z-50 btn btn-circle btn-primary shadow-xl"
@@ -176,71 +138,38 @@ const HomeContent = () => {
         {isDark ? <Sun size={18} /> : <Moon size={18} />}
       </button>
 
-      {/* Hero Slider */}
-      <section className="relative w-full overflow-hidden" style={{ height: "clamp(520px,75vh,720px)" }}>
-        <div ref={emblaRef} className="w-full h-full">
-          <div className="flex h-full">
-            {SLIDES.map((s, i) => (
-              <div key={i} className="relative flex-none w-full h-full">
-                <img src={s.img} alt={s.tag} className="absolute inset-0 w-full h-full object-cover object-center" />
-                <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
-                <div className="relative z-10 h-full flex items-center">
-                  <div className="px-6 md:px-20 max-w-2xl">
-                    <span
-                      className="inline-block text-xs font-black uppercase tracking-[0.18em] px-4 py-1.5 rounded-full mb-6"
-                      style={{ background: "hsl(var(--p))", color: "hsl(var(--pc))" }}
-                    >
-                      {s.tag}
-                    </span>
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl xl:text-6xl font-extrabold text-white leading-[1.1] mb-5 drop-shadow-lg">
-                      {s.heading}
-                    </h1>
-                    <p className="text-white/70 text-sm md:text-base leading-relaxed mb-8 max-w-md">{s.sub}</p>
-                    <div className="flex gap-3 flex-wrap">
-                      <button className="btn btn-primary rounded-xl px-7" onClick={() => router.push("/tutors")}>
-                        Browse Tutors
-                      </button>
-                      <button
-                        className="btn rounded-xl px-7 bg-white/15 text-white border-white/30 hover:bg-white/25 backdrop-blur-sm"
-                        onClick={() => router.push("/add-tutor")}
-                      >
-                        Become a Tutor
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
+      {/* ── Hero Banner ───────────────────────────────────────────────── */}
+      <section className="relative w-full overflow-hidden" style={{ height: "clamp(480px,70vh,700px)" }}>
+        <img
+          src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1400&q=80"
+          alt="Hero banner"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
+        <div className="relative z-10 h-full flex items-center">
+          <div className="px-6 md:px-20 max-w-2xl">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl xl:text-6xl font-extrabold text-white leading-[1.1] mb-5 drop-shadow-lg">
+              Study with tutors who actually know their subject.
+            </h1>
+            <p className="text-white/70 text-sm md:text-base leading-relaxed mb-8 max-w-md">
+              Real experts. Flexible schedules. Results that speak for themselves.
+            </p>
+            {/* ✅ Link wrapping buttons — no router.push needed */}
+            <div className="flex gap-3 flex-wrap">
+              <Link href="/teachers">
+                <button className="btn btn-primary rounded-xl px-7">Browse Tutors</button>
+              </Link>
+              <Link href="/add-tutor">
+                <button className="btn rounded-xl px-7 bg-white/15 text-white border-white/30 hover:bg-white/25 backdrop-blur-sm">
+                  Become a Tutor
+                </button>
+              </Link>
+            </div>
           </div>
-        </div>
-
-        <button
-          onClick={scrollPrev}
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 btn btn-circle border border-white/25 bg-black/30 hover:bg-black/50 text-white backdrop-blur-sm"
-        >
-          <ChevronLeft size={20} />
-        </button>
-        <button
-          onClick={scrollNext}
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 btn btn-circle border border-white/25 bg-black/30 hover:bg-black/50 text-white backdrop-blur-sm"
-        >
-          <ChevronRight size={20} />
-        </button>
-
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2 items-center">
-          {SLIDES.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => scrollTo(i)}
-              className={`h-2 rounded-full border-none cursor-pointer transition-all duration-300 ${
-                i === selectedSlide ? "w-8 bg-primary opacity-100" : "w-2 bg-white opacity-50"
-              }`}
-            />
-          ))}
         </div>
       </section>
 
-      {/* Stats Bar */}
+      {/* ── Stats Bar ─────────────────────────────────────────────────── */}
       <div className="bg-primary">
         <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 divide-x divide-primary-content/20">
           {STATS.map((s) => {
@@ -256,7 +185,7 @@ const HomeContent = () => {
         </div>
       </div>
 
-      {/* Subject Categories */}
+      {/* ── Subject Categories ────────────────────────────────────────── */}
       <section className="max-w-5xl mx-auto px-6 py-20">
         <div className="text-center mb-12">
           <p className="text-primary text-xs font-bold uppercase tracking-widest mb-3">What do you want to learn?</p>
@@ -279,7 +208,7 @@ const HomeContent = () => {
         </div>
       </section>
 
-      {/* Available Tutors */}
+      {/* ── Available Tutors ──────────────────────────────────────────── */}
       <section className="max-w-5xl mx-auto px-6 pb-20">
         <div className="flex items-end justify-between flex-wrap gap-4 mb-10">
           <div>
@@ -306,13 +235,13 @@ const HomeContent = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {teachers.map((teacher) => (
-              <TutorCard key={teacher._id} teacher={teacher} onBook={(id) => router.push(`/tutors/${id}`)} />
+              <TutorCard key={teacher._id} teacher={teacher} />
             ))}
           </div>
         )}
       </section>
 
-      {/* How It Works */}
+      {/* ── How It Works ──────────────────────────────────────────────── */}
       <section className="bg-base-200 border-y border-base-300">
         <div className="max-w-5xl mx-auto px-6 py-20">
           <div className="text-center mb-14">
@@ -337,7 +266,7 @@ const HomeContent = () => {
         </div>
       </section>
 
-      {/* Testimonials */}
+      {/* ── Testimonials ──────────────────────────────────────────────── */}
       <section className="max-w-5xl mx-auto px-6 py-20">
         <div className="text-center mb-12">
           <p className="text-primary text-xs font-bold uppercase tracking-widest mb-3">Student feedback</p>
@@ -374,7 +303,7 @@ const HomeContent = () => {
         </div>
       </section>
 
-      {/* CTA Banner */}
+      {/* ── CTA Banner ────────────────────────────────────────────────── */}
       <section className="bg-primary">
         <div className="max-w-3xl mx-auto px-6 py-20 text-center">
           <h2 className="text-3xl md:text-5xl font-extrabold text-primary-content mb-5 leading-tight">
@@ -384,18 +313,16 @@ const HomeContent = () => {
             Find a tutor who fits your schedule, your subject, and your budget — in under two minutes.
           </p>
           <div className="flex gap-3 justify-center flex-wrap">
-            <button
-              className="btn bg-white text-primary hover:bg-white/90 border-none rounded-xl font-bold"
-              onClick={() => router.push("/tutors")}
-            >
-              Find a Tutor
-            </button>
-            <button
-              className="btn rounded-xl font-bold bg-white/15 text-white border-white/30 hover:bg-white/25"
-              onClick={() => router.push("/add-tutor")}
-            >
-              Register as a Tutor
-            </button>
+            <Link href="/tutors">
+              <button className="btn bg-white text-primary hover:bg-white/90 border-none rounded-xl font-bold">
+                Find a Tutor
+              </button>
+            </Link>
+            <Link href="/add-tutor">
+              <button className="btn rounded-xl font-bold bg-white/15 text-white border-white/30 hover:bg-white/25">
+                Register as a Tutor
+              </button>
+            </Link>
           </div>
         </div>
       </section>

@@ -71,8 +71,8 @@ const Navbar = () => {
           <Link href="/add-tutor" className="text-base text-gray-700 hover:text-indigo-600 py-2.5 font-medium border-b border-gray-100 block">Add Tutor</Link>
           <Link href="/my-tutors" className="text-base text-gray-700 hover:text-indigo-600 py-2.5 font-medium border-b border-gray-100 block">My Tutors</Link>
           <Link href="/booked-sessions" className="text-base text-gray-700 hover:text-indigo-600 py-2.5 font-medium border-b border-gray-100 block">My Booked Sessions</Link>
-          <Button as={Link} href="/login" fullWidth className="mt-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-colors">Sign in</Button>
-          <Button as={Link} href="/register" fullWidth variant="bordered" className="mt-2 border-indigo-600 text-indigo-600 font-semibold rounded-xl hover:bg-indigo-50 transition-colors">Register</Button>
+          <Link href="/singin" fullWidth className="mt-3  px-4  py-2 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-colors">Sign in</Link>
+          <Link href="/singup" fullWidth variant="bordered" className="mt-2 px-4  py-2 border-indigo-600 text-indigo-600 font-semibold rounded-xl hover:bg-indigo-50 transition-colors ">Sing up</Link>
         </div>
       )}
 

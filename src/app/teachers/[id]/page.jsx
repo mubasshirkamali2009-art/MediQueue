@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Edit from "@/components/Edit";
-import { Delete } from "@/components/Delete";
+import Delete from "@/components/Delete"; // ✅ FIX: default import (not named)
 import {
   School,
   MapPin,
@@ -23,6 +23,7 @@ const API = "http://localhost:5000";
 
 export default function TeacherDetailPage() {
   const { id } = useParams();
+  const router = useRouter();
   const [tutor, setTutor] = useState(null);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
@@ -141,6 +142,7 @@ export default function TeacherDetailPage() {
                 </span>
               </div>
 
+              {/* Edit stays top-right */}
               <Edit
                 teacher={tutor}
                 onUpdated={(updated) => setTutor(updated)}
@@ -179,12 +181,12 @@ export default function TeacherDetailPage() {
               </div>
             )}
 
-            {/* Book button */}
-            <div className="mb-6">
+            {/* Book + Delete buttons */}
+            <div className="mb-6 flex gap-3">
               <button
                 onClick={() => { setBookingResult(null); setModalOpen(true); }}
                 disabled={bookingBlocked}
-                className={`w-full py-3 rounded-xl font-semibold text-sm transition-all duration-200 ${
+                className={`flex-1 py-3 rounded-xl font-semibold text-sm transition-all duration-200 ${
                   bookingBlocked
                     ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                     : "bg-blue-600 hover:bg-blue-700 active:scale-95 text-white shadow-md"
@@ -192,6 +194,13 @@ export default function TeacherDetailPage() {
               >
                 {noSlots ? "Fully Booked" : notYet ? "Not Available Yet" : "Book Session"}
               </button>
+
+              {/* ✅ Delete component — tutorId, tutorName, redirect on delete */}
+              <Delete
+                tutorId={tutor._id}
+                tutorName={tutor.tutorName}
+                onDeleted={() => router.push("/tutors")}
+              />
             </div>
 
           </div>
@@ -286,18 +295,15 @@ export default function TeacherDetailPage() {
                     <span className="text-xs font-bold bg-yellow-100 text-yellow-700 px-2.5 py-1 rounded-full">Pending</span>
                   </div>
 
-                  <div className="flex gap-2">
-                    <button
-                      type="submit"
-                      disabled={submitting}
-                      className="flex-1 bg-blue-600 hover:bg-blue-700 active:scale-95 disabled:opacity-60 text-white font-semibold py-3 rounded-xl transition-all duration-200 flex items-center justify-center gap-2"
-                    >
-                      {submitting
-                        ? <><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />Confirming…</>
-                        : "Confirm Booking"}
-                    </button>
-                    <Delete />
-                  </div>
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="w-full bg-blue-600 hover:bg-blue-700 active:scale-95 disabled:opacity-60 text-white font-semibold py-3 rounded-xl transition-all duration-200 flex items-center justify-center gap-2"
+                  >
+                    {submitting
+                      ? <><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />Confirming…</>
+                      : "Confirm Booking"}
+                  </button>
                 </form>
               )}
             </div>

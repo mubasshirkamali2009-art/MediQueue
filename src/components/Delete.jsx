@@ -1,86 +1,96 @@
 "use client";
-import { useState } from "react";
-import { TriangleAlert, X } from "lucide-react";
-import { useRouter } from "next/navigation";
 
-export function Delete({ tutorId }) {
-  const [open, setOpen] = useState(false);
-  const [deleting, setDeleting] = useState(false);
-  const router = useRouter();
-const handleDeleteBtn = async () => {
-    setDeleting(true);
+import { useState } from "react";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { toast } from "sonner";
+
+const Delete = ({ tutorId, tutorName, onDeleted }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleDelete = async () => {
+    setLoading(true);
     try {
       const res = await fetch(`http://localhost:5000/teachers/${tutorId}`, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
       });
 
-      if (!res.ok) throw new Error("Delete failed");
+      if (!res.ok) throw new Error(`Server error: ${res.status}`);
 
-      setOpen(false);
-      router.push("/teachers");
+      toast.success(`${tutorName} has been removed.`);
+      setIsOpen(false);
+      onDeleted?.(tutorId); // notify parent to remove card from UI
     } catch (err) {
-      console.error("Delete failed:", err);
-      setOpen(false);
+      console.error(err);
+      toast.error("Failed to delete. Make sure the server is running.");
     } finally {
-      setDeleting(false);
+      setLoading(false);
     }
   };
 
   return (
     <>
+      {/* ── Delete Button ───────────────────────────────────────────── */}
       <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="px-4 py-2 rounded-xl font-semibold text-sm bg-red-100 hover:bg-red-200 text-red-600 transition-all duration-200 shrink-0"
+        onClick={() => setIsOpen(true)}
+        className="btn btn-error btn-sm gap-2"
+        aria-label={`Delete ${tutorName}`}
       >
+        
         Delete
       </button>
 
-      {open && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-          onClick={(e) => e.target === e.currentTarget && setOpen(false)}
-        >
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden">
-            <div className="flex items-start justify-between px-5 pt-5 pb-3">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center shrink-0">
-                  <TriangleAlert size={18} className="text-red-600" />
-                </div>
-                <h2 className="font-bold text-gray-900 text-base">Delete teacher?</h2>
+      {/* ── Confirmation Modal ──────────────────────────────────────── */}
+      {isOpen && (
+        <div className="modal modal-open">
+          <div className="modal-box max-w-sm">
+
+            {/* Icon */}
+            <div className="flex justify-center mb-4">
+              <div className="bg-error/10 rounded-full p-4">
+        <FaRegTrashAlt />
               </div>
-              <button onClick={() => setOpen(false)} className="text-gray-400 hover:text-gray-600">
-                <X size={20} />
+            </div>
+
+            {/* Text */}
+            <h3 className="font-bold text-lg text-center">Delete Tutor?</h3>
+            <p className="text-base-content/60 text-sm text-center mt-2 leading-relaxed">
+              You are about to remove{" "}
+              <span className="font-semibold text-base-content">{tutorName}</span>{" "}
+              from the platform. This action cannot be undone.
+            </p>
+
+            {/* Actions */}
+            <div className="modal-action justify-center gap-3 mt-6">
+              <button
+                className="btn btn-ghost btn-sm min-w-24"
+                onClick={() => setIsOpen(false)}
+                disabled={loading}
+              >
+                Cancel
+              </button>
+              <button
+                className="btn btn-error btn-sm min-w-24 gap-2"
+                onClick={handleDelete}
+                disabled={loading}
+              >
+                {loading ? (
+                  <span className="loading loading-spinner loading-xs" />
+                ) : (
+                  <FaRegTrashAlt  className="text-base" />
+                )}
+                {loading ? "Deleting…" : "Yes, Delete"}
               </button>
             </div>
 
-            <div className="px-5 pb-5">
-              <p className="text-sm text-gray-500 mb-5">
-                This action cannot be undone. All data will be permanently removed.
-              </p>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setOpen(false)}
-                  disabled={deleting}
-                  className="flex-1 py-2.5 rounded-xl border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition disabled:opacity-50"
-                >
-                  Keep Teacher
-                </button>
-                <button
-                  onClick={handleDeleteBtn}
-                  disabled={deleting}
-                  className="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-sm font-semibold transition disabled:opacity-60 flex items-center justify-center gap-2"
-                >
-                  {deleting
-                    ? <><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />Deleting…</>
-                    : "Delete Forever"}
-                </button>
-              </div>
-            </div>
           </div>
+
+          {/* Backdrop click to close */}
+          <div className="modal-backdrop" onClick={() => !loading && setIsOpen(false)} />
         </div>
       )}
     </>
   );
-}
+};
+
+export default Delete;

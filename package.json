@@ -9,16 +9,22 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@better-auth/mongo-adapter": "^1.6.18",
     "@heroui/react": "^3.1.0",
     "@heroui/styles": "^3.0.5",
     "@react-icons/all-files": "^4.1.0",
+    "better-auth": "^1.6.18",
+    "daisyui": "^5.5.23",
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
     "lucide-react": "^1.17.0",
+    "mongodb": "^7.3.0",
     "next": "16.2.6",
     "react": "19.2.4",
     "react-datepicker": "^9.1.0",
     "react-dom": "19.2.4",
+    "react-icon": "^1.0.0",
+    "react-icons": "^5.6.0",
     "react-toastify": "^11.1.0",
     "sonner": "^2.0.7"
   },
