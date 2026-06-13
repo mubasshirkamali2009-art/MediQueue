@@ -1,7 +1,7 @@
 "use client"
 import { authClient } from '@/lib/auth-client';
 import React, { useState } from 'react';
-
+import Link from 'next/link';
 const SingUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -9,13 +9,14 @@ const SingUpPage = () => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const user = Object.fromEntries(formData.entries());
-   ;
+   console.log(user)
 
 const {data , error}=await authClient.signUp.email({
   email: user.email,
   password: user.password ,
   name:user.firstName ,
-  imageUrl:user.imageUrl
+  image:user.imageUrl ,
+  callbackURL:"/"
  
 
 
@@ -200,9 +201,9 @@ console.log({data , error})
           {/* Sign in link */}
           <p className="text-center mt-5 text-[13px] text-gray-500">
             Already have an account?{' '}
-            <a href="#" className="text-violet-500 font-medium hover:underline">
+            <Link href="/singin" className="text-violet-500 font-medium hover:underline">
               Sign in
-            </a>
+            </Link>
           </p>
 
         </form>
