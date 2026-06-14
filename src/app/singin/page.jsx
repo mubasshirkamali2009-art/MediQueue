@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
+
 const SignInPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -18,6 +19,7 @@ const SignInPage = () => {
     const { data, error } = await authClient.signIn.email({
       email: user.email,
       password: user.password,
+      callbackURL:"/"
     });
 
     if (error) {
@@ -29,17 +31,25 @@ const SignInPage = () => {
         closeButton: true,
       });
     } else {
+   
       toast.update(loadingToast, {
         render: 'Welcome back!',
         type: 'success',
         isLoading: false,
         autoClose: 3000,
         closeButton: true,
-      });
+      });  
+       
     }
 
     console.log({ data, error });
   };
+
+const handleGoogleSignin=async () =>{
+ await authClient.signIn.social({
+    provider: "google",
+  });
+}
 
   return (
     <>
@@ -67,9 +77,8 @@ const SignInPage = () => {
             <span className="text-[17px] font-medium text-gray-900 tracking-tight">Meddique</span>
           </div>
 
-          <form onSubmit={onSubmit} noValidate>
 
-            {/* Heading */}
+           {/* Heading */}
             <h1 className="text-[22px] font-medium text-gray-900 tracking-tight leading-tight mb-1.5">
               Sign in
             </h1>
@@ -77,7 +86,7 @@ const SignInPage = () => {
               Welcome back to Meddique.
             </p>
 
-<button
+<button    onClick={handleGoogleSignin}
             type="button"
             className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-800 hover:bg-gray-50 transition-colors mb-6"
           >
@@ -89,6 +98,9 @@ const SignInPage = () => {
             </svg>
             Continue with Google
           </button>
+          <form onSubmit={onSubmit} noValidate>
+
+ 
 
           {/* Divider */}
           <div className="flex items-center gap-3 mb-6">

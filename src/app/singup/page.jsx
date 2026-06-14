@@ -24,7 +24,11 @@ const {data , error}=await authClient.signUp.email({
 console.log({data , error})
 
   };
-
+const handleGoogleSignin=async () =>{
+ await authClient.signIn.social({
+    provider: "google",
+  });
+}
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-10">
       <div className="w-full max-w-md bg-white border border-gray-100 rounded-2xl px-8 py-10 shadow-sm">
@@ -48,9 +52,7 @@ console.log({data , error})
           <span className="text-[17px] font-medium text-gray-900 tracking-tight">Meddique</span>
         </div>
 
-        <form onSubmit={onSubmit} noValidate>
-
-          {/* Heading */}
+{/* Heading */}
           <h1 className="text-[22px] font-medium text-gray-900 tracking-tight leading-tight mb-1.5">
             Sign up
           </h1>
@@ -59,7 +61,7 @@ console.log({data , error})
           </p>
 
           {/* Google Button */}
-          <button
+          <button onClick={handleGoogleSignin}
             type="button"
             className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-800 hover:bg-gray-50 transition-colors mb-6"
           >
@@ -72,6 +74,9 @@ console.log({data , error})
             Continue with Google
           </button>
 
+        <form onSubmit={onSubmit} noValidate>
+
+          
           {/* Divider */}
           <div className="flex items-center gap-3 mb-6">
             <div className="flex-1 h-px bg-gray-100" />
