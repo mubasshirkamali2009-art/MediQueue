@@ -1,8 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import Book from "@/components/Book";
 import Edit from "@/components/Edit";
 import Delete from "@/components/Delete"; // ✅ FIX: default import (not named)
 import {
@@ -17,6 +16,7 @@ import {
   Lock,
   CheckCircle2,
   XCircle,
+ 
 } from "lucide-react";
 
 const API = "http://localhost:5000";
@@ -90,20 +90,20 @@ export default function TeacherDetailPage() {
   }
 
   if (loading) return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
+    <div className="min-h-screen flex flex-col ">
+
       <div className="flex-1 flex items-center justify-center">
         <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
       </div>
-      <Footer />
+     
     </div>
   );
 
   if (!tutor) return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+     
       <div className="flex-1 flex items-center justify-center text-gray-500 text-lg">Tutor not found.</div>
-      <Footer />
+    
     </div>
   );
 
@@ -118,12 +118,12 @@ export default function TeacherDetailPage() {
     : "?";
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
-      <Navbar />
+    <div className="min-h-screen flex flex-col bg-gray-50 ">
+      
 
       <main className="flex-1 w-full max-w-4xl mx-auto px-4 py-8 sm:py-12">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="px-5 sm:px-8 pt-6">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden ">
+          <div className="px-5 sm:px-8 pt-6 ">
 
             {/* Profile header */}
             <div className="flex items-center gap-4 mb-6 justify-between">
@@ -169,31 +169,11 @@ export default function TeacherDetailPage() {
               </div>
             </div>
 
-            {/* Alert banners */}
-            {noSlots && (
-              <div className="mb-4 flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 text-sm font-medium px-4 py-3 rounded-xl">
-                <Ban size={16} className="shrink-0" /> No available slots left.
-              </div>
-            )}
-            {!noSlots && notYet && (
-              <div className="mb-4 flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-700 text-sm font-medium px-4 py-3 rounded-xl">
-                <Lock size={16} className="shrink-0" /> Booking opens on <strong>{tutor.startDate}</strong>.
-              </div>
-            )}
+            
 
             {/* Book + Delete buttons */}
             <div className="mb-6 flex gap-3">
-              <button
-                onClick={() => { setBookingResult(null); setModalOpen(true); }}
-                disabled={bookingBlocked}
-                className={`flex-1 py-3 rounded-xl font-semibold text-sm transition-all duration-200 ${
-                  bookingBlocked
-                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                    : "bg-blue-600 hover:bg-blue-700 active:scale-95 text-white shadow-md"
-                }`}
-              >
-                {noSlots ? "Fully Booked" : notYet ? "Not Available Yet" : "Book Session"}
-              </button>
+             <Book/>
 
               {/* ✅ Delete component — tutorId, tutorName, redirect on delete */}
               <Delete
@@ -207,109 +187,9 @@ export default function TeacherDetailPage() {
         </div>
       </main>
 
-      <Footer />
+      
 
-      {/* Booking Modal */}
-      {modalOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50"
-          onClick={(e) => e.target === e.currentTarget && setModalOpen(false)}
-        >
-          <div className="bg-white w-full sm:max-w-md sm:mx-4 rounded-t-3xl sm:rounded-2xl shadow-2xl overflow-hidden">
-
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-500 px-5 pt-5 pb-4 flex items-start justify-between">
-              <div>
-                <h2 className="text-white font-bold text-lg">Book a Session</h2>
-                <p className="text-blue-100 text-xs mt-0.5">with {tutor.tutorName} · {tutor.subject}</p>
-              </div>
-              <button
-                onClick={() => setModalOpen(false)}
-                className="text-white/70 hover:text-white text-3xl leading-none"
-                aria-label="Close"
-              >×</button>
-            </div>
-
-            <div className="px-5 py-5 max-h-[80vh] overflow-y-auto">
-
-              {bookingResult && (
-                <div className={`mb-4 flex items-start gap-2 text-sm font-medium px-4 py-3 rounded-xl border ${
-                  bookingResult.success
-                    ? "bg-green-50 border-green-200 text-green-700"
-                    : "bg-red-50 border-red-200 text-red-700"
-                }`}>
-                  {bookingResult.success
-                    ? <CheckCircle2 size={16} className="shrink-0 mt-0.5" />
-                    : <XCircle size={16} className="shrink-0 mt-0.5" />}
-                  {bookingResult.message}
-                </div>
-              )}
-
-              {bookingResult?.success ? (
-                <button
-                  onClick={() => setModalOpen(false)}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition-all"
-                >
-                  Done
-                </button>
-              ) : (
-                <form onSubmit={handleBook} className="space-y-3">
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Tutor ID</label>
-                      <input readOnly value={tutor._id}
-                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-xs text-gray-400 cursor-not-allowed truncate" />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Tutor Name</label>
-                      <input readOnly value={tutor.tutorName}
-                        className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-400 cursor-not-allowed" />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Your Email</label>
-                    <input readOnly value={currentUser.email}
-                      className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-400 cursor-not-allowed" />
-                  </div>
-
-                  <div>
-                    <label className="block text-[10px] font-bold text-gray-700 uppercase tracking-widest mb-1">
-                      Student Name <span className="text-red-400">*</span>
-                    </label>
-                    <input required value={studentName} onChange={(e) => setStudentName(e.target.value)}
-                      placeholder="Enter your full name"
-                      className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition" />
-                  </div>
-
-                  <div>
-                    <label className="block text-[10px] font-bold text-gray-700 uppercase tracking-widest mb-1">
-                      Phone <span className="text-red-400">*</span>
-                    </label>
-                    <input required type="tel" value={phone} onChange={(e) => setPhone(e.target.value)}
-                      placeholder="+880 1XXX-XXXXXX"
-                      className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition" />
-                  </div>
-
-                  <div className="flex items-center justify-between bg-blue-50 border border-blue-100 rounded-xl px-3 py-2.5">
-                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Booking Status</span>
-                    <span className="text-xs font-bold bg-yellow-100 text-yellow-700 px-2.5 py-1 rounded-full">Pending</span>
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    className="w-full bg-blue-600 hover:bg-blue-700 active:scale-95 disabled:opacity-60 text-white font-semibold py-3 rounded-xl transition-all duration-200 flex items-center justify-center gap-2"
-                  >
-                    {submitting
-                      ? <><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />Confirming…</>
-                      : "Confirm Booking"}
-                  </button>
-                </form>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+      
     </div>
   );
 }

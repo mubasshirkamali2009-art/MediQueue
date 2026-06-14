@@ -93,7 +93,7 @@ function TutorCard({ teacher }) {
             <span className="text-xs font-normal text-base-content/40"> / hr</span>
           </span>
           {/* ✅ Link instead of router.push — avoids router init error */}
-          <Link href={`/tutors/${teacher._id}`}>
+          <Link href={`/teachers/${teacher._id}`}>
             <button className="btn btn-primary btn-sm rounded-xl">Book Session</button>
           </Link>
         </div>
@@ -216,7 +216,7 @@ const HomeContent = () => {
             <h2 className="text-3xl md:text-4xl font-bold mb-2">Available Tutors</h2>
             <p className="text-base-content/50 text-sm">A fresh selection — reshuffled each visit.</p>
           </div>
-          <Link href="/tutors">
+          <Link href="/teachers">
             <button className="btn btn-outline btn-sm rounded-xl gap-1">
               View All <ArrowRight size={14} />
             </button>
