@@ -1,8 +1,23 @@
+import { authClient } from '@/lib/auth-client';
 import { Calendar } from 'lucide-react';
 
-const Book = () => {
+const Book = ({ tutor}) => {
+    const{data:session} = authClient.useSession();
+    const user= session?.user;
+
+    const handleBooking = async() => {
+        const bookingData={
+            userId: user.id ,
+            userImage: user.image ,
+            userName: user.name ,
+            tutorId: _id ,
+            tutorName: tutor.name ,
+            userEmail: user.email
+        }
+        console.log(bookingData)
+    }
   return (
-    <button 
+    <button  onClick={handleBooking}
       className="
         group
         w-full sm:w-auto md:w-full

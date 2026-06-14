@@ -29,8 +29,6 @@ export default function TeacherDetailPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [studentName, setStudentName] = useState("");
   const [phone, setPhone] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [bookingResult, setBookingResult] = useState(null);
 
   const currentUser = { email: "student@example.com" };
 
