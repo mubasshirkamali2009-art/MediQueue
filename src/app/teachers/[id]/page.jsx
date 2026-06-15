@@ -171,7 +171,7 @@ export default function TeacherDetailPage() {
 
             {/* Book + Delete buttons */}
             <div className="mb-6 flex gap-3">
-             <Book/>
+             <Book  tutor={tutor}/>
 
               {/* ✅ Delete component — tutorId, tutorName, redirect on delete */}
               <Delete

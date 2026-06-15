@@ -5,16 +5,30 @@ const Book = ({ tutor}) => {
     const{data:session} = authClient.useSession();
     const user= session?.user;
 
+
+
+
     const handleBooking = async() => {
         const bookingData={
             userId: user.id ,
             userImage: user.image ,
             userName: user.name ,
-            tutorId: _id ,
-            tutorName: tutor.name ,
-            userEmail: user.email
+            tutorId: tutor._id ,
+            tutorName: tutor.tutorName ,
+            userEmail: user.email ,
+            tutorImage: tutor.photoUrl
         }
-        console.log(bookingData)
+       const res =  await fetch("http://localhost:5000/booking" , {
+        method:"POST" ,
+        headers: {
+          'content-type': 'application/json'
+        } ,
+        body:JSON.stringify(bookingData)
+
+       })
+
+const data =await res.json();
+console.log(data)
     }
   return (
     <button  onClick={handleBooking}
