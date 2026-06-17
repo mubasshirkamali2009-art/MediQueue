@@ -1,7 +1,9 @@
 "use client";
 
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 import { toast, Toaster } from "sonner";
 
 const SUBJECTS = [
@@ -29,6 +31,10 @@ const getLocalDateString = () => {
 };
 
 const AddTutorPage = () => {
+  const router = useRouter();
+  const { data: session, isPending } = authClient.useSession();
+  const user = session?.user;
+
   const [form, setForm] = useState({
     tutorName: "",
     photoUrl: "",
@@ -78,7 +84,7 @@ const AddTutorPage = () => {
       const res = await fetch("http://localhost:5000/teachers", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, userEmail: user.email }),
       });
 
       if (!res.ok) throw new Error(`Server error: ${res.status}`);
@@ -95,6 +101,28 @@ const AddTutorPage = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (!isPending && !user) {
+      router.push("/singin");
+    }
+  }, [isPending, user, router]);
+
+  if (isPending) {
+    return (
+      <div className="min-h-screen bg-[#0b1623] flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[#5ba3d9] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-[#0b1623] flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[#5ba3d9] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div>

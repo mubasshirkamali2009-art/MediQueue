@@ -34,7 +34,7 @@ const Navbar = () => {
           <Link href="/teachers" className="text-sm text-gray-700 hover:text-indigo-600 px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition-colors font-medium">Tutors</Link>
           <Link href="/add-tutor" className="text-sm text-gray-700 hover:text-indigo-600 px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition-colors font-medium">Add Tutor</Link>
           <Link href="/my-tutors" className="text-sm text-gray-700 hover:text-indigo-600 px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition-colors font-medium">My Tutors</Link>
-          <Link href="/booked-sessions" className="text-sm text-gray-700 hover:text-indigo-600 px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition-colors font-medium">My Booked Sessions</Link>
+          <Link href="/my-bookings" className="text-sm text-gray-700 hover:text-indigo-600 px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition-colors font-medium">My Booked Sessions</Link>
         </div>
 
         {/* Right side - everything together */}
@@ -90,7 +90,7 @@ const Navbar = () => {
           <Link href="/teachers" className="text-base text-gray-700 hover:text-indigo-600 py-2.5 font-medium border-b border-gray-100 block">Tutors</Link>
           <Link href="/add-tutor" className="text-base text-gray-700 hover:text-indigo-600 py-2.5 font-medium border-b border-gray-100 block">Add Tutor</Link>
           <Link href="/my-tutors" className="text-base text-gray-700 hover:text-indigo-600 py-2.5 font-medium border-b border-gray-100 block">My Tutors</Link>
-          <Link href="/booked-sessions" className="text-base text-gray-700 hover:text-indigo-600 py-2.5 font-medium border-b border-gray-100 block">My Booked Sessions</Link>
+          <Link href="/my-bookings" className="text-base text-gray-700 hover:text-indigo-600 py-2.5 font-medium border-b border-gray-100 block">My Booked Sessions</Link>
           {user ? (
             <button
               onClick={handleSignout}

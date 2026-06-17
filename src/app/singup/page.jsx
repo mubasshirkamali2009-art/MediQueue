@@ -1,4 +1,6 @@
 "use client"
+
+import { useRouter } from 'next/navigation';
 import { authClient } from '@/lib/auth-client';
 import React, { useState } from 'react';
 import Link from 'next/link';
@@ -6,7 +8,7 @@ import Link from 'next/link';
 const SingUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordError] = useState('');  // ← new
-
+const router = useRouter();
   const validatePassword = (password) => {  // ← new
     if (password.length < 6) return 'Password must be at least 6 characters.';
     if (!/[A-Z]/.test(password)) return 'Password must contain at least one uppercase letter.';
@@ -33,7 +35,7 @@ const SingUpPage = () => {
       image: user.imageUrl,
       callbackURL: "/"
     });
-    console.log({ data, signUpError });
+   if (data) router.push('/singin');
   };
 
   const handleGoogleSignin = async () => {
