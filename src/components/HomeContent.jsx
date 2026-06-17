@@ -195,7 +195,8 @@ const HomeContent = () => {
           {CATEGORIES.map((c) => {
             const Icon = c.icon;
             return (
-              <Link key={c.label} href={`/tutors?subject=${c.label}`}>
+              // 🔧 CHANGED: was /tutors?subject=... (route doesn't exist) — now /teachers?subject=...
+              <Link key={c.label} href={`/teachers?subject=${encodeURIComponent(c.label)}`}>
                 <div className="card bg-base-200 hover:bg-base-300 border border-base-300 hover:border-primary/40 hover:-translate-y-1 hover:shadow-lg transition-all duration-200 p-4 text-center cursor-pointer">
                   <div className="flex justify-center mb-2 text-primary">
                     <Icon size={24} />
@@ -313,7 +314,7 @@ const HomeContent = () => {
             Find a tutor who fits your schedule, your subject, and your budget — in under two minutes.
           </p>
           <div className="flex gap-3 justify-center flex-wrap">
-            <Link href="/tutors">
+            <Link href="/teachers">
               <button className="btn bg-white text-primary hover:bg-white/90 border-none rounded-xl font-bold">
                 Find a Tutor
               </button>

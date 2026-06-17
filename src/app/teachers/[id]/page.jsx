@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client"; // 🔧 NEW: adjust this path to your project
 import Book from "@/components/Book";
 import Edit from "@/components/Edit";
 import Delete from "@/components/Delete"; // ✅ FIX: default import (not named)
@@ -24,6 +25,8 @@ const API = "http://localhost:5000";
 export default function TeacherDetailPage() {
   const { id } = useParams();
   const router = useRouter();
+  const { data: session, isPending } = authClient.useSession(); // 🔧 NEW: auth check, same pattern as other private pages
+
   const [tutor, setTutor] = useState(null);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
@@ -31,6 +34,13 @@ export default function TeacherDetailPage() {
   const [phone, setPhone] = useState("");
 
   const currentUser = { email: "student@example.com" };
+
+  // 🔧 NEW: redirect to /singin if not logged in (same as other private pages)
+  useEffect(() => {
+    if (!isPending && !session) {
+      router.push("/singin");
+    }
+  }, [isPending, session, router]);
 
   useEffect(() => {
     fetch(`${API}/teachers/${id}`)
@@ -85,6 +95,24 @@ export default function TeacherDetailPage() {
     } finally {
       setSubmitting(false);
     }
+  }
+
+  // 🔧 NEW: auth gate — shows while checking session
+  if (isPending) {
+    return (
+      <div className="min-h-screen bg-[#0b1623] flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[#5ba3d9] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  // 🔧 NEW: auth gate — shows while redirecting to /singin
+  if (!session) {
+    return (
+      <div className="min-h-screen bg-[#0b1623] flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[#5ba3d9] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
   }
 
   if (loading) return (
