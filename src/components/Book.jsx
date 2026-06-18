@@ -66,7 +66,7 @@ const Book = ({ tutor }) => {
         bookedAt: new Date().toISOString(),
       };
 
-      const res = await fetch('${process.env.NEXT_PUBLIC_SERVER_URL}/booking', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/booking`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(bookingData),
