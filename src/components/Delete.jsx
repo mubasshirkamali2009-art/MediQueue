@@ -11,7 +11,7 @@ const Delete = ({ tutorId, tutorName, onDeleted }) => {
   const handleDelete = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:5000/teachers/${tutorId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/teachers/${tutorId}`, {
         method: "DELETE",
       });
 

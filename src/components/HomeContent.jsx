@@ -114,7 +114,7 @@ const HomeContent = () => {
   }, [isDark]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/teachers")
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/teachers`)
       .then((r) => r.json())
       .then((data) => setTeachers([...data].sort(() => Math.random() - 0.5).slice(0, 6)))
       .catch(() => setTeachers([]))
@@ -127,19 +127,14 @@ const HomeContent = () => {
   }, []);
 
   return (
-    <div>
+    <div className="dark:bg-gray-900">
 
       {/* ── Theme Toggle FAB ──────────────────────────────────────────── */}
-      <button
-        onClick={() => setIsDark(!isDark)}
-        className="fixed bottom-6 right-6 z-50 btn btn-circle btn-primary shadow-xl"
-        aria-label="Toggle theme"
-      >
-        {isDark ? <Sun size={18} /> : <Moon size={18} />}
-      </button>
+     
 
       {/* ── Hero Banner ───────────────────────────────────────────────── */}
-      <section className="relative w-full overflow-hidden" style={{ height: "clamp(480px,70vh,700px)" }}>
+      <section className="dark:bg-black relative w-full overflow-hidden" style={{ height: "clamp(480px,70vh,700px)" }}>
+        
         <img
           src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1400&q=80"
           alt="Hero banner"
@@ -186,7 +181,7 @@ const HomeContent = () => {
       </div>
 
       {/* ── Subject Categories ────────────────────────────────────────── */}
-      <section className="max-w-5xl mx-auto px-6 py-20">
+      <section className=" max-w-5xl mx-auto px-6 py-20">
         <div className="text-center mb-12">
           <p className="text-primary text-xs font-bold uppercase tracking-widest mb-3">What do you want to learn?</p>
           <h2 className="text-3xl md:text-4xl font-bold">Browse by Subject</h2>

@@ -43,7 +43,7 @@ const Book = ({ tutor }) => {
     setResult(null);
 
     try {
-      const freshRes = await fetch(`http://localhost:5000/teachers/${tutor._id}`);
+      const freshRes = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/teachers/${tutor._id}`);
       const fresh = await freshRes.json();
 
       if (Number(fresh.totalSlots) === 0) {
@@ -66,14 +66,14 @@ const Book = ({ tutor }) => {
         bookedAt: new Date().toISOString(),
       };
 
-      const res = await fetch('http://localhost:5000/booking', {
+      const res = await fetch('${process.env.NEXT_PUBLIC_SERVER_URL}/booking', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(bookingData),
       });
 
       if (!res.ok) throw new Error();
-const slotRes = await fetch(`http://localhost:5000/teachers/${tutor._id}/decrease-slot`, {
+const slotRes = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/teachers/${tutor._id}/decrease-slot`, {
   method: 'PATCH',
 });
 const slotData = await slotRes.json();

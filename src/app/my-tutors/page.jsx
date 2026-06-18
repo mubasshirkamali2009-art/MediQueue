@@ -25,7 +25,7 @@ const MyTutors = () => {
   useEffect(() => {
     if (!user?.email) return;
 
-    fetch(`http://localhost:5000/teachers?email=${encodeURIComponent(user.email)}`)
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/teachers?email=${encodeURIComponent(user.email)}`)
       .then((res) => res.json())
       .then((data) => {
         setTutors(Array.isArray(data) ? data : []);
@@ -74,7 +74,7 @@ const MyTutors = () => {
   }
 
   return (
-    <section className="px-4 py-8 max-w-6xl mx-auto">
+    <section className="px-4 py-8 max-w-6xl mx-auto ">
       <h2 className="text-2xl font-bold text-gray-800 mb-6">My Tutors</h2>
 
       {tutors.length === 0 ? (

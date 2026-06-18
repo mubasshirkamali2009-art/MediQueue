@@ -81,7 +81,7 @@ const AddTutorPage = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/teachers", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/teachers`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...form, userEmail: user.email }),

@@ -1,22 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client"; // <-- adjust this path to your project
 
-const TeacherPage = () => {
+const TeacherList = () => {
   const [tutors, setTutors] = useState([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const searchParams = useSearchParams();
   const { data: session, isPending } = authClient.useSession();
 
-  // 🔧 NEW: read ?subject=... from the URL (set when clicking a category card on home page)
+  // 🔧 read ?subject=... from the URL (set when clicking a category card on home page)
   const subjectFilter = searchParams.get("subject");
 
   useEffect(() => {
-    fetch("http://localhost:5000/teachers")
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/teachers`)
       .then((res) => res.json())
       .then((data) => {
         setTutors(data);
@@ -34,7 +34,7 @@ const TeacherPage = () => {
     }
   }, [isPending, session, router]);
 
-  // 🔧 NEW: filter tutors by subject (case-insensitive) if a subject param is present in the URL
+  // 🔧 filter tutors by subject (case-insensitive) if a subject param is present in the URL
   const filteredTutors = subjectFilter
     ? tutors.filter(
         (t) => t.subject?.toLowerCase() === subjectFilter.toLowerCase()
@@ -70,11 +70,11 @@ const TeacherPage = () => {
       <section className="px-4 py-8 max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
           <h2 className="text-2xl font-bold text-gray-800">
-            {/* 🔧 NEW: heading reflects active filter */}
+            {/* 🔧 heading reflects active filter */}
             {subjectFilter ? `${subjectFilter} Tutors` : "All Tutors"}
           </h2>
 
-          {/* 🔧 NEW: simple "clear filter" link, only shows when a subject filter is active */}
+          {/* 🔧 simple "clear filter" link, only shows when a subject filter is active */}
           {subjectFilter && (
             <Link
               href="/teachers"
@@ -195,6 +195,20 @@ const TeacherPage = () => {
         )}
       </section>
     </div>
+  );
+};
+
+const TeacherPage = () => {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center min-h-[300px]">
+          <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      }
+    >
+      <TeacherList />
+    </Suspense>
   );
 };
 

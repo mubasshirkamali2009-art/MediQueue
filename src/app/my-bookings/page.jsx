@@ -29,7 +29,7 @@ const MyBookingPage = () => {
   useEffect(() => {
     if (!user?.email) return;
 
-    fetch(`http://localhost:5000/bookings/user/${encodeURIComponent(user.email)}`)
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/bookings/user/${encodeURIComponent(user.email)}`)
       .then((res) => res.json())
       .then((data) => {
         setBookings(Array.isArray(data) ? data : []);
@@ -53,7 +53,7 @@ const MyBookingPage = () => {
     setCancelling(true);
     try {
       const res = await fetch(
-        `http://localhost:5000/bookings/${cancelTarget._id}/cancel`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/bookings/${cancelTarget._id}/cancel`,
         { method: "PATCH" }
       );
       if (!res.ok) throw new Error();
@@ -74,7 +74,7 @@ const MyBookingPage = () => {
 
   if (isPending) {
     return (
-      <div className="min-h-screen bg-[#0b1623] flex items-center justify-center">
+      <div className=" min-h-screen bg-[#0b1623] flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-[#5ba3d9] border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -82,7 +82,7 @@ const MyBookingPage = () => {
 
   if (!session) {
     return (
-      <div className="min-h-screen bg-[#0b1623] flex items-center justify-center">
+      <div className="min-h-screen  bg-[#0b1623] flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-[#5ba3d9] border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -91,13 +91,13 @@ const MyBookingPage = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[300px]">
-        <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-10  h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
   return (
-    <section className="px-4 py-8 max-w-6xl mx-auto">
+    <section className="px-4 py-8 max-w-6xl mx-auto ">
       <h2 className="text-2xl font-bold text-gray-800 mb-6">My Booked Sessions</h2>
 
       {bookings.length === 0 ? (

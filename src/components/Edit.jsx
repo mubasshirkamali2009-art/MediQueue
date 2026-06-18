@@ -51,7 +51,7 @@ const Edit = ({ teacher, onUpdated }) => {
     setSaving(true);
     setError("");
     try {
-      const res = await fetch(`http://localhost:5000/teachers/${teacher._id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/teachers/${teacher._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
